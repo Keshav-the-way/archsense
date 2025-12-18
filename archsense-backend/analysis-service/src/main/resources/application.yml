@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: analysis-service
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+server:
+  port: 8084
+
+services:
+  artifact:
+    base-url: http://localhost:8083
+  executor:
+    base-url: http://localhost:8085
+
+logging:
+  level:
+    com.archsense: DEBUG

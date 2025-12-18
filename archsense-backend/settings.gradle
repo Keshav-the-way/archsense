@@ -1,0 +1,10 @@
+rootProject.name = 'archsense-backend'
+
+include 'common'
+include 'user-service'
+include 'project-service'
+include 'artifact-service'
+include 'analysis-service'
+include 'analysis-executor'
+include 'ai-service'
+include 'api-gateway'

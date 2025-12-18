@@ -1,0 +1,54 @@
+spring:
+  application:
+    name: artifact-service
+
+  data:
+    mongodb:
+      uri: ${MONGODB_URI}
+
+      server:
+        port: 8083
+#      auto-index-creation: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.add.type.headers: false
+    consumer:
+      group-id: artifact-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.archsense.common.event
+        spring.json.value.default.type: com.archsense.common.event.ProjectDeletedEvent
+      auto-offset-reset: earliest
+
+  servlet:
+    multipart:
+      max-file-size: 50MB
+      max-request-size: 50MB
+
+server:
+  port: 8083
+
+storage:
+#  type: local
+  type: s3
+  s3:
+    bucket-artifacts: archsense-artifacts-prod
+    region: ${region}
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+#  local:
+#    base-path: ./storage/artifacts
+
+logging:
+  level:
+    com.archsense: DEBUG
+
+services:
+  project-service:
+    base-url: http://localhost:8082

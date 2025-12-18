@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: analysis-executor
+
+server:
+  port: 8085
+
+storage:
+#  type: local
+  type: s3
+#  local:
+#    artifacts-path: ./storage/artifacts
+#    reports-path: ./storage/reports
+  s3:
+    bucket-reports: archsense-reports-prod
+    region: eu-north-1
+    access-key: ${AWS_ACCESS_KEY_ID}
+    secret-key: ${AWS_SECRET_ACCESS_KEY}
+
+services:
+  analysis:
+    base-url: http://localhost:8084
+  artifact:
+    base-url: http://localhost:8083
+
+ai:
+  provider: anthropic
+  anthropic:
+    api-key: ${ANTHROPIC_API_KEY}
+    model: claude-haiku-4-5-20251001
+    max-tokens: 10000
+#  provider: mock
+
+
+logging:
+  level:
+    com.archsense: DEBUG
+    okhttp3: INFO
