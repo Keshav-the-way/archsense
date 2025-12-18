@@ -234,7 +234,8 @@ MIT License - see LICENSE file for details
 
 ## 📧 Contact
 
-Your Name - your.email@example.com
+Your Name - Keshav Dave
+Email - davekeshav4@gmail.com
 
 Project Link: https://github.com/your-username/archsense
 \`\`\`
