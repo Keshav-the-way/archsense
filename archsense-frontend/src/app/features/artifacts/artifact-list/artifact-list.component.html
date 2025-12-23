@@ -1,0 +1,16 @@
+<div class="artifact-list" *ngIf="artifacts.length > 0">
+  <div class="artifact-item" *ngFor="let artifact of artifacts">
+    <div class="artifact-icon">📄</div>
+    <div class="artifact-info">
+      <h4>{{ artifact.name }}</h4>
+      <p class="artifact-meta">
+        {{ artifact.type }} • {{ artifact.size | fileSize }} • 
+        Uploaded {{ artifact.uploadedAt | date:'short' }}
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="empty-state" *ngIf="artifacts.length === 0">
+  <p>No artifacts uploaded yet.</p>
+</div>

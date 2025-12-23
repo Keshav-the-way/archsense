@@ -1,0 +1,19 @@
+<div class="analysis-list" *ngIf="analyses.length > 0">
+  <div class="analysis-card" *ngFor="let analysis of analyses" (click)="viewAnalysis(analysis.id)">
+    <div class="analysis-header">
+      <h4>Analysis #{{ analysis.id.substring(0, 8) }}</h4>
+      <span class="badge" [ngClass]="getStatusClass(analysis.status)">
+        {{ analysis.status }}
+      </span>
+    </div>
+    <div class="analysis-meta">
+      <p>{{ analysis.artifactIds.length }} artifact(s)</p>
+      <p>Created: {{ analysis.createdAt | date:'short' }}</p>
+      <p *ngIf="analysis.completedAt">Completed: {{ analysis.completedAt | date:'short' }}</p>
+    </div>
+  </div>
+</div>
+
+<div class="empty-state" *ngIf="analyses.length === 0">
+  <p>No analyses yet. Upload artifacts and trigger an analysis to get started.</p>
+</div>

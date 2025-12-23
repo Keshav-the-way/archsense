@@ -1,0 +1,56 @@
+<app-header></app-header>
+
+<div class="container trigger-container">
+  <div class="card">
+    <h2>Start Analysis</h2>
+    <p class="subtitle">Select artifacts to analyze</p>
+
+    <div class="alert alert-error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+    <div class="artifacts-selection" *ngIf="!loading">
+      <div
+        class="artifact-checkbox"
+        *ngFor="let artifact of artifacts"
+        (click)="toggleArtifact(artifact.id)"
+      >
+        <input
+          type="checkbox"
+          [checked]="isSelected(artifact.id)"
+          (click)="$event.stopPropagation()"
+        />
+        <div class="artifact-info">
+          <h4>{{ artifact.name }}</h4>
+          <p>{{ artifact.type }} • {{ artifact.uploadedAt | date:'short' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="info-box" *ngIf="!loading">
+      <p>
+        <strong>Selected:</strong> {{ selectedArtifactIds.size }} artifact(s)
+      </p>
+      <p class="info-note">
+        The analysis will use AI to examine your architecture artifacts and provide insights,
+        identify issues, and recommend improvements.
+      </p>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="submitting">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="startAnalysis()"
+        [disabled]="selectedArtifactIds.size === 0 || submitting"
+      >
+        {{ submitting ? 'Starting Analysis...' : 'Start Analysis' }}
+      </button>
+    </div>
+  </div>
+</div>

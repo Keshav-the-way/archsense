@@ -1,0 +1,61 @@
+.header {
+  background: linear-gradient(135deg, #bf8de3 0%, #cfa3ec 100%);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+
+  &-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+  }
+}
+
+.logo {
+  h1 {
+    font-size: 24px;
+    color: #007bff;
+    margin: 0;
+  }
+}
+
+.nav {
+  display: flex;
+  gap: 20px;
+
+  a {
+    color: #555;
+    font-weight: 500;
+    padding: 8px 16px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #f5f7fa;
+      color: #007bff;
+    }
+
+    &.active {
+      color: #007bff;
+      background-color: #e7f3ff;
+    }
+  }
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  .user-name {
+    color: #555;
+    font-weight: 500;
+  }
+
+  .btn-sm {
+    padding: 6px 12px;
+    font-size: 13px;
+  }
+}

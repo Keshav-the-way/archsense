@@ -1,0 +1,55 @@
+<app-header></app-header>
+
+<div class="container upload-container">
+  <div class="card">
+    <h2>Upload Artifact</h2>
+
+    <div class="alert alert-error" *ngIf="errorMessage">
+      {{ errorMessage }}
+    </div>
+
+    <div
+      class="upload-zone"
+      [class.drag-over]="dragOver"
+      (dragover)="onDragOver($event)"
+      (dragleave)="onDragLeave($event)"
+      (drop)="onDrop($event)"
+      (click)="fileInput.click()"
+    >
+      <input
+        #fileInput
+        type="file"
+        (change)="onFileSelected($event)"
+        style="display: none"
+        accept=".png,.jpg,.jpeg,.gif,.pdf,.md,.txt"
+      />
+
+      <div class="upload-icon">📁</div>
+
+      <div *ngIf="!selectedFile">
+        <p class="upload-text">Drag and drop your file here</p>
+        <p class="upload-subtext">or click to browse</p>
+        <p class="upload-hint">Supported: Images, PDF, Markdown, Text (Max 50MB)</p>
+      </div>
+
+      <div *ngIf="selectedFile" class="selected-file">
+        <p class="file-name">{{ selectedFile.name }}</p>
+        <p class="file-size">{{ formatFileSize(selectedFile.size) }}</p>
+      </div>
+    </div>
+
+    <div class="form-actions">
+      <button type="button" class="btn btn-secondary" (click)="cancel()" [disabled]="uploading">
+        Cancel
+      </button>
+      <button
+        type="button"
+        class="btn btn-primary"
+        (click)="upload()"
+        [disabled]="!selectedFile || uploading"
+      >
+        {{ uploading ? 'Uploading...' : 'Upload' }}
+      </button>
+    </div>
+  </div>
+</div>

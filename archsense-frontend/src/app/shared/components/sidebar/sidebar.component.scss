@@ -1,0 +1,40 @@
+.sidebar {
+  width: 250px;
+  background: #2c3e50;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  padding-top: 60px;
+
+  &-nav {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 20px;
+    color: #ecf0f1;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background: #34495e;
+    }
+
+    &.active {
+      background: #3498db;
+    }
+  }
+
+  &-icon {
+    font-size: 20px;
+  }
+
+  &-label {
+    font-size: 14px;
+    font-weight: 500;
+  }
+}

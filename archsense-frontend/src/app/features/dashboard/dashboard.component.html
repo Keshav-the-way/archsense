@@ -1,0 +1,35 @@
+<app-header></app-header>
+
+<div class="container dashboard">
+  <div class="dashboard-header">
+    <h2>Dashboard</h2>
+    <button class="btn btn-primary" (click)="navigateToCreateProject()">
+      + New Project
+    </button>
+  </div>
+
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <div class="projects-grid" *ngIf="!loading && projects.length > 0">
+    <div class="project-card" *ngFor="let project of projects" (click)="navigateToProject(project.id)">
+      <h3>{{ project.name }}</h3>
+      <p class="project-description">{{ project.description || 'No description' }}</p>
+      <div class="project-meta">
+        <span class="meta-item">Created: {{ project.createdAt | date:'short' }}</span>
+        <span class="meta-item">Updated: {{ project.updatedAt | date:'short' }}</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="empty-state" *ngIf="!loading && projects.length === 0">
+    <h3>No Projects Yet</h3>
+    <p>Create your first project to start analyzing your architecture.</p>
+    <button class="btn btn-primary" (click)="navigateToCreateProject()">
+      Create Project
+    </button>
+  </div>
+</div>

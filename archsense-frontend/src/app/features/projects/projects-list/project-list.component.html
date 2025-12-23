@@ -1,0 +1,10 @@
+<div class="project-grid">
+  <div class="project-card" *ngFor="let project of projects" (click)="selectProject(project.id)">
+    <h3>{{ project.name }}</h3>
+    <p class="project-description">{{ project.description || 'No description' }}</p>
+    <div class="project-meta">
+      <span>Created: {{ project.createdAt | date:'short' }}</span>
+      <span>Updated: {{ project.updatedAt | date:'short' }}</span>
+    </div>
+  </div>
+</div>

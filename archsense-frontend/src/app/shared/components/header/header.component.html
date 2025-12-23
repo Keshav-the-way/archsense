@@ -1,0 +1,19 @@
+<header class="header">
+  <div class="container header-content">
+    <div class="logo">
+      <a routerLink="/dashboard">
+        <h1>ArchSense</h1>
+      </a>
+    </div>
+
+    <nav class="nav" *ngIf="currentUser">
+      <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/projects" routerLinkActive="active">Projects</a>
+    </nav>
+
+    <div class="user-menu" *ngIf="currentUser">
+      <span class="user-name">{{ currentUser.name }}</span>
+      <button class="btn btn-secondary btn-sm" (click)="logout()">Logout</button>
+    </div>
+  </div>
+</header>

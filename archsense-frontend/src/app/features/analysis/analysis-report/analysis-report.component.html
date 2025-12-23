@@ -1,0 +1,272 @@
+<!-- analysis-report.component.html - UPDATED with Phase 1 features -->
+
+<app-header></app-header>
+
+<div class="container report-container">
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!loading && analysis">
+    <div class="report-header">
+      <div>
+        <h2>
+          Analysis Report
+          <!-- NEW: Version Badge -->
+          <span class="version-badge" *ngIf="analysis.version">v{{ analysis.version }}</span>
+        </h2>
+        <p class="report-meta">
+          Created: {{ analysis.createdAt | date:'medium' }} •
+          <span class="badge" [ngClass]="'badge-' + (analysis.status === AnalysisStatus.COMPLETED ? 'success' : analysis.status === AnalysisStatus.FAILED ? 'danger' : 'info')">
+            {{ analysis.status }}
+          </span>
+          <!-- NEW: Previous version link -->
+     <span *ngIf="analysis?.previousAnalysisId" class="previous-version">
+  <a [routerLink]="['/analyses', analysis?.previousAnalysisId]">
+    View Previous Version
+  </a>
+</span>
+        </p>
+      </div>
+      <button class="btn btn-secondary" (click)="backToProject()">
+        Back to Project
+      </button>
+    </div>
+
+    <!-- Existing status messages -->
+    <div class="status-message" *ngIf="analysis.status === AnalysisStatus.PENDING">
+      <div class="status-icon">⏳</div>
+      <h3>Analysis Pending</h3>
+      <p>Your analysis request is queued and will begin shortly.</p>
+    </div>
+
+    <div class="status-message" *ngIf="analysis.status === AnalysisStatus.IN_PROGRESS">
+      <div class="status-icon">⚙️</div>
+      <h3>Analysis In Progress</h3>
+      <p>AI is analyzing your architecture artifacts. This may take a few minutes.</p>
+      <div class="loading-spinner"></div>
+    </div>
+
+    <div class="status-message error" *ngIf="analysis.status === AnalysisStatus.FAILED">
+      <div class="status-icon">❌</div>
+      <h3>Analysis Failed</h3>
+      <p>{{ analysis.error || 'An error occurred during analysis' }}</p>
+    </div>
+
+    <div *ngIf="analysis.status === AnalysisStatus.COMPLETED && report">
+      
+      <!-- NEW: Evolution Metrics Card (only for version > 1) -->
+      <div class="card evolution-section" *ngIf="analysis.evolutionMetrics">
+        <h3>📊 Architecture Evolution</h3>
+        <div class="evolution-metrics">
+          <div class="metric-item">
+            <span class="metric-icon">✅</span>
+            <span class="metric-value">{{ analysis.evolutionMetrics.issuesResolved }}</span>
+            <span class="metric-label">Issues Resolved</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-icon">🆕</span>
+            <span class="metric-value">{{ analysis.evolutionMetrics.newIssues }}</span>
+            <span class="metric-label">New Issues</span>
+          </div>
+          <div class="metric-item">
+            <span class="metric-icon">⚠️</span>
+            <span class="metric-value">{{ analysis.evolutionMetrics.issuesRegressed }}</span>
+            <span class="metric-label">Regressed</span>
+          </div>
+          <div class="metric-item score">
+            <span class="metric-icon">📈</span>
+            <span class="metric-value" [ngClass]="getImprovementScoreClass(analysis.evolutionMetrics.improvementScore)">
+              {{ analysis.evolutionMetrics.improvementScore | number:'1.0-0' }}/100
+            </span>
+            <span class="metric-label">Improvement Score</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Existing Summary Section -->
+      <div class="card summary-section">
+        <h3>Summary</h3>
+        <p class="summary-overview">{{ report.summary }}</p>
+        <div class="architecture-info">
+          <h4>Architecture Pattern</h4>
+          <span class="architecture-badge">{{ report.architecturePattern }}</span>
+        </div>
+        
+        <div class="summary-grid">
+          <div class="summary-column">
+            <h4>Components ({{ report.components.length }})</h4>
+            <ul class="component-list">
+              <li *ngFor="let component of report.components">{{ component }}</li>
+            </ul>
+          </div>
+          <div class="summary-column">
+            <h4>Connections ({{ report.connections.length }})</h4>
+            <ul class="connection-list">
+              <li *ngFor="let connection of report.connections">{{ connection }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- NEW: Evolution Analysis Details (only for version > 1) -->
+      <div class="card evolution-details-section" *ngIf="showEvolution && report.evolutionAnalysis">
+        <h3>
+          🔄 Detailed Evolution Analysis
+          <span class="trend-badge" [ngClass]="getTrendClass(report.evolutionAnalysis.overallTrend)">
+            {{ getTrendIcon(report.evolutionAnalysis.overallTrend) }} {{ report.evolutionAnalysis.overallTrend }}
+          </span>
+        </h3>
+
+        <!-- Resolved Issues -->
+        <div class="evolution-category" *ngIf="report.evolutionAnalysis.resolvedIssues.length > 0">
+          <h4 class="resolved-header">✅ Resolved Issues ({{ report.evolutionAnalysis.resolvedIssues.length }})</h4>
+          <ul class="evolution-list resolved">
+            <li *ngFor="let issue of report.evolutionAnalysis.resolvedIssues">{{ issue }}</li>
+          </ul>
+        </div>
+
+        <!-- New Issues -->
+        <div class="evolution-category" *ngIf="report.evolutionAnalysis.newIssues.length > 0">
+          <h4 class="new-header">🆕 New Issues ({{ report.evolutionAnalysis.newIssues.length }})</h4>
+          <ul class="evolution-list new">
+            <li *ngFor="let issue of report.evolutionAnalysis.newIssues">{{ issue }}</li>
+          </ul>
+        </div>
+
+        <!-- Regressed Issues -->
+        <div class="evolution-category" *ngIf="report.evolutionAnalysis.regressedIssues.length > 0">
+          <h4 class="regressed-header">⚠️ Regressed Issues ({{ report.evolutionAnalysis.regressedIssues.length }})</h4>
+          <ul class="evolution-list regressed">
+            <li *ngFor="let issue of report.evolutionAnalysis.regressedIssues">{{ issue }}</li>
+          </ul>
+        </div>
+
+        <div class="evolution-empty" *ngIf="report.evolutionAnalysis.resolvedIssues.length === 0 && 
+                                            report.evolutionAnalysis.newIssues.length === 0 && 
+                                            report.evolutionAnalysis.regressedIssues.length === 0">
+          <p>No significant changes detected between versions.</p>
+        </div>
+      </div>
+
+      <!-- Issues Section - UPDATED with confidence scores -->
+      <div class="card issues-section">
+        <h3>Issues ({{ report.issues.length }})</h3>
+        <div class="issue-item" *ngFor="let issue of report.issues">
+          <div class="issue-header">
+            <span class="badge" [ngClass]="getSeverityClass(issue.severity)">
+              {{ issue.severity }}
+            </span>
+            <span class="issue-category">{{ issue.category }}</span>
+            <!-- NEW: Confidence Score -->
+            <span class="confidence-badge" 
+                  *ngIf="issue.confidenceScore"
+                  [ngClass]="getConfidenceClass(issue.confidenceScore)"
+                  [title]="'Confidence: ' + (issue.confidenceScore * 100 | number:'1.0-0') + '%'">
+              {{ getConfidenceLabel(issue.confidenceScore) }} Confidence
+            </span>
+          </div>
+          <p class="issue-description">{{ issue.description }}</p>
+          <p class="issue-location"><strong>Location:</strong> {{ issue.location }}</p>
+        </div>
+        <div class="empty-message" *ngIf="report.issues.length === 0">
+          No issues detected! Your architecture looks solid.
+        </div>
+      </div>
+
+      <!-- Recommendations Section -->
+      <div class="card recommendations-section">
+        <h3>Recommendations ({{ report.recommendations.length }})</h3>
+        <div class="recommendation-item" *ngFor="let rec of report.recommendations">
+          <div class="recommendation-header">
+            <span class="badge" [ngClass]="getPriorityClass(rec.priority)">
+              {{ rec.priority }}
+            </span>
+            <span class="recommendation-title">{{ rec.title }}</span>
+          </div>
+          <p class="recommendation-description">{{ rec.description }}</p>
+          <div class="recommendation-benefit">
+            <span class="benefit-label">Benefit:</span>
+            <span class="benefit-text">{{ rec.benefit }}</span>
+          </div>
+        </div>
+        <div class="empty-message" *ngIf="report.recommendations.length === 0">
+          No recommendations at this time.
+        </div>
+      </div>
+
+      <!-- NEW: Cost Estimation Section -->
+      <div class="card cost-section" *ngIf="report.costEstimation">
+        <h3>💰 Cost Estimation</h3>
+        
+        <div class="cost-summary">
+          <div class="cost-total">
+            <span class="cost-label">Estimated Monthly Cost</span>
+            <span class="cost-amount">{{ formatCurrency(report.costEstimation.monthlyEstimateUsd) }}</span>
+            <span class="cost-tier-badge" [ngClass]="getCostTierClass(report.costEstimation.costTier)">
+              {{ report.costEstimation.costTier }} Cost Tier
+            </span>
+          </div>
+        </div>
+
+        <!-- Cost Breakdown by Type -->
+        <div class="cost-breakdown">
+          <h4>Cost Breakdown by Service Type</h4>
+          <div class="cost-type-grid">
+            <div class="cost-type-item" *ngFor="let type of ['compute', 'database', 'storage', 'network', 'other']">
+              <ng-container *ngIf="getTotalCostByType(report.costEstimation.componentCosts, type) > 0">
+                <span class="cost-type-icon">
+                  {{ type === 'compute' ? '⚙️' : type === 'database' ? '🗄️' : type === 'storage' ? '💾' : type === 'network' ? '🌐' : '📦' }}
+                </span>
+                <span class="cost-type-name">{{ type | titlecase }}</span>
+                <span class="cost-type-amount">{{ formatCurrency(getTotalCostByType(report.costEstimation.componentCosts, type)) }}</span>
+              </ng-container>
+            </div>
+          </div>
+        </div>
+
+        <!-- Component-Level Costs -->
+        <div class="component-costs">
+          <h4>Component-Level Costs</h4>
+          <div class="cost-table">
+            <div class="cost-row cost-header-row">
+              <span class="cost-col-component">Component</span>
+              <span class="cost-col-type">Type</span>
+              <span class="cost-col-amount">Monthly Cost</span>
+            </div>
+            <div class="cost-row" *ngFor="let cost of report.costEstimation.componentCosts">
+              <span class="cost-col-component">{{ cost.componentName }}</span>
+              <span class="cost-col-type">
+                <span class="type-badge">{{ cost.serviceType }}</span>
+              </span>
+              <span class="cost-col-amount">{{ formatCurrency(cost.estimatedMonthlyCost) }}</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cost Optimizations -->
+        <div class="cost-optimizations" *ngIf="report.costEstimation.costOptimizations.length > 0">
+          <h4>💡 Cost Optimization Suggestions</h4>
+          <ul class="optimization-list">
+            <li *ngFor="let optimization of report.costEstimation.costOptimizations">
+              {{ optimization }}
+            </li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+```
+
+**Key Changes in HTML:**
+1. ✅ Version badge next to title
+2. ✅ Link to previous version
+3. ✅ Evolution metrics card with improvement score
+4. ✅ Detailed evolution analysis (resolved/new/regressed issues)
+5. ✅ Confidence scores on each issue
+6. ✅ Complete cost estimation section with breakdown
+7. ✅ Cost optimization suggestions

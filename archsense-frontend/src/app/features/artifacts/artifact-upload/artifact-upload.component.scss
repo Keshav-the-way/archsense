@@ -1,0 +1,75 @@
+.upload-container {
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .card {
+    h2 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+  }
+}
+
+.upload-zone {
+  border: 2px dashed #ddd;
+  border-radius: 8px;
+  padding: 60px 40px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background-color: #fafafa;
+
+  &:hover {
+    border-color: #007bff;
+    background-color: #f0f8ff;
+  }
+
+  &.drag-over {
+    border-color: #007bff;
+    background-color: #e7f3ff;
+  }
+
+  .upload-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  .upload-text {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  .upload-subtext {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  .upload-hint {
+    font-size: 12px;
+    color: #999;
+  }
+
+  .selected-file {
+    .file-name {
+      font-size: 16px;
+      font-weight: 500;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .file-size {
+      font-size: 14px;
+      color: #666;
+    }
+  }
+}
+
+.form-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 30px;
+}

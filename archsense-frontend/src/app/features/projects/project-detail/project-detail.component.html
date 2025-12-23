@@ -1,0 +1,94 @@
+<app-header></app-header>
+
+<div class="container project-detail">
+  <app-loading-spinner *ngIf="loading"></app-loading-spinner>
+
+  <div *ngIf="!loading && project">
+    <div class="project-header">
+      <div>
+        <h2>{{ project.name }}</h2>
+        <p class="project-description">{{ project.description || 'No description' }}</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-primary" (click)="uploadArtifact()">
+          + Upload Artifact
+        </button>
+        <button class="btn btn-primary" (click)="triggerAnalysis()">
+          Analyze
+        </button>
+        <button class="btn btn-danger" (click)="deleteProject()">
+          Delete Project
+        </button>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button
+        class="tab"
+        [class.active]="activeTab === 'artifacts'"
+        (click)="activeTab = 'artifacts'"
+      >
+        Artifacts ({{ artifacts.length }})
+      </button>
+      <button
+        class="tab"
+        [class.active]="activeTab === 'analyses'"
+        (click)="activeTab = 'analyses'"
+      >
+        Analyses ({{ analyses.length }})
+      </button>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'artifacts'">
+      <div class="artifacts-list" *ngIf="artifacts.length > 0">
+        <div class="artifact-item" *ngFor="let artifact of artifacts">
+          <div class="artifact-icon">📄</div>
+          <div class="artifact-info">
+            <h4>{{ artifact.name }}</h4>
+            <p class="artifact-meta">
+              {{ artifact.type }} • {{ artifact.size | fileSize }} • 
+              Uploaded {{ artifact.uploadedAt | date:'short' }}
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="artifacts.length === 0">
+        <h3>No Artifacts Yet</h3>
+        <p>Upload architecture diagrams, documentation, or other files to analyze.</p>
+        <button class="btn btn-primary" (click)="uploadArtifact()">
+          Upload Artifact
+        </button>
+      </div>
+    </div>
+
+    <div class="tab-content" *ngIf="activeTab === 'analyses'">
+      <div class="analyses-list" *ngIf="analyses.length > 0">
+        <div class="analysis-item" *ngFor="let analysis of analyses" (click)="viewAnalysis(analysis.id)">
+          <div class="analysis-info">
+            <h4>Analysis #{{ analysis.id.substring(0, 8) }}</h4>
+            <p class="analysis-meta">
+              {{ analysis.artifactIds.length }} artifact(s) • 
+              Created {{ analysis.createdAt | date:'short' }}
+            </p>
+          </div>
+          <span class="badge" [ngClass]="getStatusBadgeClass(analysis.status)">
+            {{ analysis.status }}
+          </span>
+        </div>
+      </div>
+
+      <div class="empty-state" *ngIf="analyses.length === 0">
+        <h3>No Analyses Yet</h3>
+        <p>Upload artifacts and trigger an analysis to get AI-powered insights.</p>
+        <button class="btn btn-primary" (click)="triggerAnalysis()" [disabled]="artifacts.length === 0">
+          Start Analysis
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+</div>

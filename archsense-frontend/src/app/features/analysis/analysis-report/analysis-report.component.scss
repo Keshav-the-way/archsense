@@ -1,0 +1,642 @@
+// analysis-report.component.scss - UPDATED with Phase 1 features
+
+.report-container {
+  padding: 40px 20px;
+}
+
+.report-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 30px;
+
+  h2 {
+    margin: 0 0 10px 0;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .report-meta {
+    color: #666;
+    margin: 0;
+    
+    .previous-version a {
+      color: #007bff;
+      text-decoration: none;
+      
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}
+
+// NEW: Version Badge
+.version-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border-radius: 16px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+// Existing status message styles
+.status-message {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+  .status-icon {
+    font-size: 64px;
+    margin-bottom: 20px;
+  }
+
+  h3 {
+    color: #333;
+    margin-bottom: 10px;
+  }
+
+  p {
+    color: #666;
+    margin-bottom: 20px;
+  }
+
+  &.error {
+    background-color: #fff5f5;
+    border: 1px solid #feb2b2;
+
+    h3 {
+      color: #c53030;
+    }
+  }
+}
+
+// NEW: Evolution Metrics Card
+.evolution-section {
+  margin-bottom: 30px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border: none;
+
+  h3 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+  }
+
+  .evolution-metrics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+
+    .metric-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s;
+
+      &:hover {
+        transform: translateY(-4px);
+      }
+
+      .metric-icon {
+        font-size: 32px;
+        margin-bottom: 12px;
+      }
+
+      .metric-value {
+        font-size: 36px;
+        font-weight: 700;
+        color: #333;
+        margin-bottom: 8px;
+      }
+
+      .metric-label {
+        font-size: 14px;
+        color: #666;
+        text-align: center;
+      }
+
+      &.score .metric-value {
+        &.score-excellent { color: #10b981; }
+        &.score-good { color: #3b82f6; }
+        &.score-fair { color: #f59e0b; }
+        &.score-poor { color: #ef4444; }
+      }
+    }
+  }
+}
+
+// NEW: Evolution Details Section
+.evolution-details-section {
+  margin-bottom: 30px;
+
+  h3 {
+    color: #333;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .trend-badge {
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+
+    &.trend-improving {
+      background: #d1fae5;
+      color: #065f46;
+    }
+
+    &.trend-stable {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    &.trend-degrading {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    &.trend-unknown {
+      background: #f3f4f6;
+      color: #6b7280;
+    }
+  }
+
+  .evolution-category {
+    margin-bottom: 24px;
+
+    h4 {
+      margin-bottom: 12px;
+      font-size: 18px;
+
+      &.resolved-header { color: #059669; }
+      &.new-header { color: #2563eb; }
+      &.regressed-header { color: #dc2626; }
+    }
+
+    .evolution-list {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 12px 16px;
+        margin-bottom: 8px;
+        border-radius: 6px;
+        line-height: 1.6;
+
+        &:before {
+          margin-right: 8px;
+        }
+      }
+
+      &.resolved li {
+        background: #d1fae5;
+        border-left: 4px solid #059669;
+        &:before { content: '✅'; }
+      }
+
+      &.new li {
+        background: #dbeafe;
+        border-left: 4px solid #2563eb;
+        &:before { content: '🆕'; }
+      }
+
+      &.regressed li {
+        background: #fee2e2;
+        border-left: 4px solid #dc2626;
+        &:before { content: '⚠️'; }
+      }
+    }
+  }
+
+  .evolution-empty {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-style: italic;
+  }
+}
+
+// Updated Summary Section
+.summary-section {
+  margin-bottom: 30px;
+
+  h3, h4 {
+    margin-bottom: 16px;
+    color: #333;
+  }
+
+  .summary-overview {
+    color: #555;
+    line-height: 1.8;
+    margin-bottom: 24px;
+  }
+
+  .architecture-info {
+    margin-bottom: 24px;
+
+    .architecture-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      background: #f0f9ff;
+      border: 1px solid #bae6fd;
+      border-radius: 6px;
+      color: #0369a1;
+      font-weight: 600;
+    }
+  }
+
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 24px;
+
+    .summary-column {
+      h4 {
+        margin-bottom: 12px;
+        font-size: 16px;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          padding: 8px 12px;
+          margin-bottom: 6px;
+          background: #f8f9fa;
+          border-radius: 4px;
+          font-size: 14px;
+          color: #555;
+        }
+      }
+    }
+  }
+}
+
+// Updated Issues Section with Confidence Scores
+.issues-section {
+  margin-bottom: 30px;
+
+  h3 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .issue-item {
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .issue-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+
+      .issue-category {
+        font-weight: 600;
+        color: #555;
+      }
+
+      // NEW: Confidence Badge
+      .confidence-badge {
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 600;
+        margin-left: auto;
+
+        &.confidence-high {
+          background: #d1fae5;
+          color: #065f46;
+        }
+
+        &.confidence-medium {
+          background: #fef3c7;
+          color: #92400e;
+        }
+
+        &.confidence-low {
+          background: #fee2e2;
+          color: #991b1b;
+        }
+      }
+    }
+
+    .issue-description {
+      color: #333;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .issue-location {
+      font-size: 14px;
+      color: #666;
+      margin: 0;
+    }
+  }
+}
+
+// Recommendations Section
+.recommendations-section {
+  margin-bottom: 30px;
+
+  h3 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  .recommendation-item {
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    background-color: #fafafa;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .recommendation-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+
+      .recommendation-title {
+        font-weight: 600;
+        color: #333;
+        font-size: 16px;
+      }
+    }
+
+    .recommendation-description {
+      color: #555;
+      margin-bottom: 12px;
+      line-height: 1.6;
+    }
+
+    .recommendation-benefit {
+      padding-top: 12px;
+      border-top: 1px solid #e0e0e0;
+
+      .benefit-label {
+        font-weight: 600;
+        color: #059669;
+        margin-right: 6px;
+      }
+
+      .benefit-text {
+        color: #555;
+      }
+    }
+  }
+}
+
+// NEW: Cost Estimation Section
+.cost-section {
+  margin-bottom: 30px;
+
+  h3 {
+    color: #333;
+    margin-bottom: 24px;
+    font-size: 24px;
+  }
+
+  h4 {
+    color: #555;
+    margin: 24px 0 16px 0;
+    font-size: 18px;
+  }
+
+  .cost-summary {
+    margin-bottom: 32px;
+
+    .cost-total {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 12px;
+      color: white;
+
+      .cost-label {
+        font-size: 16px;
+        margin-bottom: 8px;
+        opacity: 0.9;
+      }
+
+      .cost-amount {
+        font-size: 48px;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+
+      .cost-tier-badge {
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 14px;
+        font-weight: 600;
+        background: rgba(255, 255, 255, 0.2);
+      }
+    }
+  }
+
+  .cost-breakdown {
+    margin-bottom: 32px;
+
+    .cost-type-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+
+      .cost-type-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 20px;
+        background: #f8f9fa;
+        border-radius: 8px;
+        border: 2px solid #e9ecef;
+
+        .cost-type-icon {
+          font-size: 32px;
+          margin-bottom: 8px;
+        }
+
+        .cost-type-name {
+          font-size: 14px;
+          color: #666;
+          margin-bottom: 8px;
+        }
+
+        .cost-type-amount {
+          font-size: 20px;
+          font-weight: 700;
+          color: #333;
+        }
+      }
+    }
+  }
+
+  .component-costs {
+    margin-bottom: 32px;
+
+    .cost-table {
+      background: white;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      overflow: hidden;
+
+      .cost-row {
+        display: grid;
+        grid-template-columns: 2fr 1fr 1fr;
+        gap: 16px;
+        padding: 16px;
+        border-bottom: 1px solid #e0e0e0;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        &.cost-header-row {
+          background: #f8f9fa;
+          font-weight: 600;
+          color: #333;
+        }
+
+        .cost-col-component {
+          color: #333;
+        }
+
+        .cost-col-type {
+          .type-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 4px;
+            font-size: 12px;
+            text-transform: capitalize;
+          }
+        }
+
+        .cost-col-amount {
+          text-align: right;
+          font-weight: 600;
+          color: #059669;
+        }
+      }
+    }
+  }
+
+  .cost-optimizations {
+    .optimization-list {
+      list-style: none;
+      padding: 0;
+
+      li {
+        padding: 16px;
+        margin-bottom: 12px;
+        background: #f0fdf4;
+        border-left: 4px solid #10b981;
+        border-radius: 6px;
+        line-height: 1.6;
+        color: #555;
+
+        &:before {
+          content: '💡';
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+}
+
+// Existing Badge Styles
+.severity-high, .priority-high {
+  background-color: #dc3545;
+  color: white;
+}
+
+.severity-medium, .priority-medium {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.severity-low, .priority-low {
+  background-color: #28a745;
+  color: white;
+}
+
+.badge {
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.empty-message {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-style: italic;
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+  .report-header {
+    flex-direction: column;
+    gap: 16px;
+
+    button {
+      width: 100%;
+    }
+  }
+
+  .evolution-metrics {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .summary-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .cost-type-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .cost-row {
+    grid-template-columns: 1fr !important;
+    
+    .cost-col-amount {
+      text-align: left !important;
+    }
+  }
+}

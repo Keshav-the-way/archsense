@@ -1,0 +1,19 @@
+.form-container {
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: 0 auto;
+
+  .card {
+    h2 {
+      margin-bottom: 30px;
+      color: #333;
+    }
+  }
+
+  .form-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 30px;
+  }
+}

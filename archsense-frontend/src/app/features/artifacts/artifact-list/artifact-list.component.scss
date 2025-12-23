@@ -1,0 +1,40 @@
+.artifact-list {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.artifact-item {
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+  .artifact-icon {
+    font-size: 32px;
+  }
+
+  .artifact-info {
+    flex: 1;
+
+    h4 {
+      margin: 0 0 5px 0;
+      color: #333;
+    }
+
+    .artifact-meta {
+      margin: 0;
+      font-size: 14px;
+      color: #999;
+    }
+  }
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+}
