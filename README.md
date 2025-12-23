@@ -234,10 +234,11 @@ MIT License - see LICENSE file for details
 
 ## 📧 Contact
 
-Your Name - your.email@example.com
+Keshav Dave
 
-Project Link: https://github.com/your-username/archsense
-\`\`\`
+Email - davekeshav4@gmail.com
+
+Project Link: https://github.com/Keshav_the_way/archsense
 
 ---
 
@@ -280,4 +281,4 @@ GATEWAY_PORT=8080
 
 ---
 
-## 🗂️ Final Directory Structure (What to Upload)
+### Created with ❤️ by Keshav Dave
